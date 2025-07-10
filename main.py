@@ -39,7 +39,7 @@ COIN_RULES = {
 EMAIL_USER = os.getenv('EMAIL_USER', 'EMAIL_USER')
 EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD', 'EMAIL_PASSWORD')
 SMTP_SERVER = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
-SMTP_PORT = int(os.getenv('SMTP_PORT', 587))
+SMTP_PORT = int(os.getenv('SMTP_PORT') or 587)
 RECIPIENT_EMAIL = os.getenv('RECIPIENT_EMAIL', 'RECIPIENT_EMAIL')
 
 # Get API keys from environment variables
@@ -463,7 +463,7 @@ def main():
     )
 
     # Send email automatically for scheduled tasks
-    # send_email(html_report)
+    send_email(html_report)
     print("\n",html_report)
 
 if __name__ == "__main__":
