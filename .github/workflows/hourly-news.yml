@@ -10,6 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Clean out any old actions cache
+      - name: Clean old runner caches
+        run: sudo rm -rf /home/runner/work/_actions /home/runner/toolcache/actions || true
+    
       - name: Check out code
         uses: actions/checkout@v4
 
