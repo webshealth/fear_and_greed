@@ -2,8 +2,7 @@ name: News Fetcher
 
 on:
   schedule:
-    # Runs every hour at minute 0 (cron syntax)
-    - cron: '0 * * * *'
+    - cron: '0 * * * *'  # Runs every hour
   workflow_dispatch:  # Allow manual runs
 
 jobs:
@@ -25,13 +24,11 @@ jobs:
     - name: Run news fetcher
       env:
         APITUBE_API_KEY: ${{ secrets.APITUBE_API_KEY }}
-      run: python fetch_news.py
-
-    - name: Save output as artifact (optional)
-      uses: actions/upload-artifact@v3
-      if: always()
+      run: |
+        python fetch_news.py > output.json
+        
+    - name: Save output as artifact
+      uses: actions/upload-artifact@v4
       with:
         name: news-data
-        path: |
-          *.json
-          *.txt
+        path: output.json
