@@ -2,9 +2,8 @@ name: Fetch APITube News Hourly
 
 on:
   schedule:
-    # At minute 0 past every hour
     - cron:  '0 * * * *'
-  workflow_dispatch:   # allows manual runs
+  workflow_dispatch:
 
 jobs:
   fetch-news:
@@ -29,4 +28,10 @@ jobs:
           APITUBE_API_KEY: ${{ secrets.APITUBE_API_KEY }}
         run: |
           python main.py > output.json
-          cat output.json   # for logs
+          cat output.json
+
+      - name: Upload JSON as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: news-output
+          path: output.json
