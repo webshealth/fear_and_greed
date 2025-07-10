@@ -158,8 +158,8 @@ def get_market_news():
             print(url)
             response = requests.get(url, timeout=10)
             print("response",response)
-            data = response.json()
-            print("bitcoinnews", data)
+            # data = response.json()
+            # print("bitcoinnews", data)
             news_items = []
             for item in data.get('results', [])[:3]:
                 news_items.append({
@@ -464,7 +464,7 @@ def main():
 
     # Send email automatically for scheduled tasks
     send_email(html_report)
-    print("\n",html_report)
+    # print("\n",html_report)
 
 if __name__ == "__main__":
     print("🚀 CRYPTOCURRENCY PORTFOLIO MANAGER")
