@@ -36,14 +36,14 @@ COIN_RULES = {
 }
 
 # Email configuration (set these as environment variables)
-EMAIL_USER = os.getenv('EMAIL_USER', 'chanakaworkmail@gmail.com')
-EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD', 'edzm eugn hdgk qinb')
+EMAIL_USER = os.getenv('EMAIL_USER', 'EMAIL_USER')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD', 'EMAIL_PASSWORD')
 SMTP_SERVER = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
 SMTP_PORT = int(os.getenv('SMTP_PORT', 587))
-RECIPIENT_EMAIL = os.getenv('RECIPIENT_EMAIL', 'cbcusandaruwan@gmail.com')
+RECIPIENT_EMAIL = os.getenv('RECIPIENT_EMAIL', 'RECIPIENT_EMAIL')
 
 # Get API keys from environment variables
-ALPHA_VANTAGE_API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY', 'ITAPJIQ80TVGWFCH')
+ALPHA_VANTAGE_API_KEY = os.getenv('ALPHA_VANTAGE_API_KEY', 'ALPHA_VANTAGE_API_KEY')
 
 
 
