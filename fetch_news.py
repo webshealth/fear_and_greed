@@ -1,38 +1,59 @@
 import os
 import requests
 import json
-from datetime import datetime
+import sys
+from datetime import datetime, timezone
 
 def main():
+    # Get API key from environment variables
     api_key = os.getenv("APITUBE_API_KEY")
     if not api_key:
-        print("API key not found!")
+        result = {
+            "status": "error",
+            "message": "API key not found in environment variables",
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        }
+        print(json.dumps(result))
         return
 
+    # Construct API URL
     url = f"https://api.apitube.io/v1/news/everything?api_key={api_key}&per_page=1"
     
     try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
+        # Make API request
+        response = requests.get(url, timeout=10)  # 10-second timeout
+        response.raise_for_status()  # Raise exception for HTTP errors
         
-        # Create structured output
+        # Process response
+        data = response.json()
         result = {
-            "timestamp": datetime.utcnow().isoformat(),
             "status": "success",
-            "data": data
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "data": {
+                "articles_count": len(data.get("articles", [])),
+                "first_article_title": data.get("articles", [{}])[0].get("title", "N/A")
+            }
         }
         
-        # Print JSON to stdout (will be captured in output.json)
-        print(json.dumps(result))
+        # Print result to stdout (captured in output.json)
+        print(json.dumps(result, ensure_ascii=False))
         
-    except Exception as e:
+    except requests.exceptions.RequestException as e:
         error_result = {
-            "timestamp": datetime.utcnow().isoformat(),
             "status": "error",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "error_type": type(e).__name__,
             "message": str(e)
         }
-        print(json.dumps(error_result))
+        print(json.dumps(error_result, ensure_ascii=False))
+    except Exception as e:
+        error_result = {
+            "status": "error",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "error_type": "UnexpectedError",
+            "message": f"Unexpected error: {str(e)}"
+        }
+        print(json.dumps(error_result, ensure_ascii=False))
 
 if __name__ == "__main__":
     main()
