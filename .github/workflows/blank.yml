@@ -2,12 +2,13 @@ name: News Fetcher
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Runs every hour
-  workflow_dispatch:  # Allow manual runs
+    - cron: '0 * * * *'  # Runs at the top of every hour
+  workflow_dispatch:     # Allow manual triggering
 
 jobs:
   fetch-news:
     runs-on: ubuntu-latest
+    timeout-minutes: 5   # Prevent long-running jobs
 
     steps:
     - name: Checkout repository
@@ -22,13 +23,14 @@ jobs:
       run: pip install requests
 
     - name: Run news fetcher
+      id: fetch
       env:
         APITUBE_API_KEY: ${{ secrets.APITUBE_API_KEY }}
-      run: |
-        python fetch_news.py > output.json
-        
-    - name: Save output as artifact
+      run: python fetch_news.py > output.json
+
+    - name: Upload news data
       uses: actions/upload-artifact@v4
       with:
-        name: news-data
+        name: news-data-${{ steps.fetch.outcome }}-${{ github.run_id }}
         path: output.json
+        retention-days: 7  # Keep artifacts for 7 days
