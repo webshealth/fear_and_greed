@@ -1,0 +1,37 @@
+name: News Fetcher
+
+on:
+  schedule:
+    # Runs every hour at minute 0 (cron syntax)
+    - cron: '0 * * * *'
+  workflow_dispatch:  # Allow manual runs
+
+jobs:
+  fetch-news:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: pip install requests
+
+    - name: Run news fetcher
+      env:
+        APITUBE_API_KEY: ${{ secrets.APITUBE_API_KEY }}
+      run: python fetch_news.py
+
+    - name: Save output as artifact (optional)
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: news-data
+        path: |
+          *.json
+          *.txt
